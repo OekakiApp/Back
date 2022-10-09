@@ -6,11 +6,9 @@ import sys
 
 def main():
     """Run administrative tasks."""
-<<<<<<< HEAD
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
-=======
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'graimerback.settings')
->>>>>>> django mysqlのローカル仮想環境をdockerで構築
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

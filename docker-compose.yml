@@ -4,6 +4,7 @@ services:
     container_name: "graimer-web"
     build: .
     command: python3 manage.py runserver 0.0.0.0:8000
+    restart: always
     working_dir: /code
     ports:
       - 8000:8000
@@ -14,10 +15,9 @@ services:
   db:
     container_name: "graimer-db"
     image: mysql:8.0
-    restart: always
     environment:
+      MYSQL_ROOT_PASSWORD: ""
       MYSQL_DATABASE: "graimer"
-      MYSQL_USER: root
       MYSQL_PASSWORD: password
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     volumes:
