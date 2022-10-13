@@ -77,11 +77,15 @@ WSGI_APPLICATION = 'graimerback.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'graimer',
-        'USER': 'root',
-        'HOST': 'db',
+        'NAME': 'hiroya$graimer',
+        'USER': 'hiroya',
+        'PASSWORD': 'nPdBywhEw@cR3TX',
+        'HOST': 'hiroya.mysql.pythonanywhere-services.com',
         'PORT': 3306
-    }
+    },
+    'OPTIONS': {
+        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+    },
 }
 
 
