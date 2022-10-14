@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'djoser',
     'accounts',
 ]
 
@@ -145,6 +146,7 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT', ),
     # 認証トークン
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'BLACKLIST_AFTER_ROTATION': False,
 }
 
 # カスタムユーザー
