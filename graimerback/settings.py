@@ -1,20 +1,21 @@
+import os
 from pathlib import Path
 from datetime import timedelta
+from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5hq5rjafd2fo_^&+14qg2z-8(gg_dnhhyu35nm!iba_2l+60eg'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '.pythonanywhere.com', 'hiroya.pythonanywhere.com']
 
 
 # Application definition
@@ -69,11 +70,15 @@ WSGI_APPLICATION = 'graimerback.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'graimer',
-        'USER': 'root',
-        'HOST': 'db',
+        'NAME': os.getenv("NAME"),
+        'USER': os.getenv("USER"),
+        'PASSWORD': os.getenv("PASSWORD"),
+        'HOST': os.getenv("HOST"),
         'PORT': 3306
-    }
+    },
+    'OPTIONS': {
+        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+    },
 }
 
 
@@ -151,3 +156,13 @@ SIMPLE_JWT = {
 
 # カスタムユーザー
 AUTH_USER_MODEL = 'accounts.UserAccount'
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+SECRET_KEY = get_random_secret_key()
+
+try:
+    from .local_settings import *
+except:
+    pass
