@@ -32,9 +32,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'accounts',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -154,6 +156,13 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'BLACKLIST_AFTER_ROTATION': False,
 }
+
+# CORS
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:5173',
+    'http://localhost:5173',
+]
 
 # カスタムユーザー
 AUTH_USER_MODEL = 'accounts.UserAccount'
