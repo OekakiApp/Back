@@ -1,3 +1,4 @@
+import dj_database_url
 import os
 from pathlib import Path
 from datetime import timedelta
@@ -15,7 +16,11 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '.pythonanywhere.com', 'hiroya.pythonanywhere.com']
+ALLOWED_HOSTS = ['localhost']
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -41,8 +46,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
-
 ROOT_URLCONF = 'graimerback.urls'
 
 TEMPLATES = [
@@ -68,14 +74,21 @@ WSGI_APPLICATION = 'graimerback.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv("NAME"),
-        'USER': os.getenv("USER"),
-        'PASSWORD': os.getenv("PASSWORD"),
-        'HOST': os.getenv("HOST"),
-        'PORT': 3306
-    },
+    #'default':  {
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': os.getenv("NAME"),
+        # 'USER': os.getenv("USER"),
+        # 'PASSWORD': os.getenv("PASSWORD"),
+        # 'HOST': os.getenv("HOST"),
+        # 'PORT': 3306
+        # Database
+# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+
+    #},
+    'default': dj_database_url.config(
+        #Feel free to alter this value to suit your needs.
+        default='postgresql://postgres:postgres@localhost:5432/graimer',
+        conn_max_age=600),
     'OPTIONS': {
         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
     },
@@ -119,6 +132,13 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'static_root'
+# Following settings only make sense on production and may break development environments.
+if not DEBUG:    # Tell Django to copy statics to the `staticfiles` directory
+    # in your application directory on Render.
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    # Turn on WhiteNoise storage backend that takes care of compressing static files
+    # and creating unique names for each version so they can safely be cached forever.
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # メディア
 MEDIA_URL = '/media/'
